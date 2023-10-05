@@ -9,6 +9,8 @@ public class Livros {
     double valor;
     int qtdEstoque;
 
+// Abaixo criei um metodo construtor , o contrututor server para criar o objeto em memória. Devemos criar pois
+// utilizaremos quando formos instansiar a classe.
     public Livros(String codigo, String titulo, String editora, String area, int ano, double valor, int qtdEstoque) {
         this.codigo = codigo;
         this.titulo = titulo;
@@ -19,9 +21,7 @@ public class Livros {
         this.qtdEstoque = qtdEstoque;
     }
 
-    public Livros() {
-
-    }
+  // Criei o método GET para acessar os atributos e retornar.
 
     public String getCodigo() {
         return codigo;
@@ -49,5 +49,12 @@ public class Livros {
 
     public int getQtdEstoque() {
         return qtdEstoque;
+    }
+
+
+    //metodo feito para clacular o valor de estoque
+
+    public double getValorTotal() {
+        return valor*qtdEstoque;
     }
 }

@@ -1,9 +1,11 @@
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class SistemaLivraria {
 
+    // aqui é a classe que ficará responsável por rodar o programa
 
     public static void main(String[] args) {
         Scanner scanner= new Scanner(System.in);
@@ -42,7 +44,10 @@ public class SistemaLivraria {
                 double valor = scanner.nextDouble();
                 System.out.print("Digite a quantidade em estoque: ");
                 int quantidadeEstoque = scanner.nextInt();
+                //Aqui eu criei uma nova instancia da classe livros para gravar todos os dados digitados do usuário
+                // como argumento para o construtor da classe livros
                 Livros novoLivro = new Livros(codigo, titulo, editora, area, ano, valor, quantidadeEstoque);
+
                 livrariaService.cadastrarLivro(novoLivro);
 
             }
@@ -90,8 +95,12 @@ public class SistemaLivraria {
             }
             if(opcao==5){
                 System.out.println("Filtro por valor, digite o valor do livro que procura: ");
-                double procuraPorPreco = scanner.nextDouble();
-                List<Livros> livroPorPreco = livrariaService.buscaPorPreco(procuraPorPreco);
+                System.out.println("Digite o valor minimo :");
+                double valorMinimo= scanner.nextDouble();
+                System.out.println("Digite o valor maximo :");
+                double valorMaximo= scanner.nextDouble();
+
+                List<Livros> livroPorPreco = livrariaService.buscaPorPreco(valorMinimo, valorMaximo);
                 for (Livros livro : livroPorPreco) {
                     System.out.println("Resultado da busca por titulo: ");
                     System.out.println();
@@ -108,10 +117,27 @@ public class SistemaLivraria {
 
             }
             if(opcao==6){
+                System.out.println("Digite a quantidade em estoque que busca:");
+                int QtEstoque= scanner.nextInt();
+                List<Livros> estoque= new ArrayList<>();
+                for(Livros livro: estoque){
+                    System.out.println("Resultado da busca por titulo: ");
+                    System.out.println();
+                    System.out.println("Codigo: " + livro.getCodigo());
+                    System.out.println("Titulo: " + livro.getTitulo());
+                    System.out.println("Editora: " + livro.getEditora());
+                    System.out.println("Categoria: " + livro.getArea());
+                    System.out.println("Ano: " + livro.getAno());
+                    System.out.println("Valor: R$ " + livro.getValor());
+                    System.out.println("Estoque: " + livro.getQtdEstoque());
+                    System.out.println("Valor total em estoque: R$ " + livro.getValor());
+                    System.out.println();
+                }
 
             }
             if(opcao==7){
 
+                System.out.println("O valor total do estoque é ?" + livrariaService.calcularEstoque() );
             }
             if(opcao==0){
                 System.out.println("Você encerrou o programa! ");
