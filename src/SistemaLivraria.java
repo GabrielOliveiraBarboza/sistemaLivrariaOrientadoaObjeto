@@ -1,4 +1,5 @@
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,13 +8,32 @@ public class SistemaLivraria {
 
     // aqui é a classe que ficará responsável por rodar o programa
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
+        String arquivo =("src/BDLivraria.csv");
         Scanner scanner= new Scanner(System.in);
         int opcao= -1;
 
         LivrariaService livrariaService= new LivrariaService();
+       try (BufferedReader br = new BufferedReader(new FileReader(arquivo))){
+           String linha= br.readLine();
+          // linha=br.readLine();
+           while(linha!=null){
+               String [] vet = linha.split(",");
+               String codigo = vet[0];
+               String titulo =vet[1];
+               String editora = vet[2];
+               String area= vet[3];
+               int ano = Integer.parseInt(vet[4].trim());
+               double valor= Double.parseDouble(vet[5].trim());
+               int qtdEstoque= Integer.parseInt(vet[6].trim());
+               Livros livro = new Livros (codigo,titulo,editora,area,ano,valor,qtdEstoque);
+               livrariaService.cadastrarLivro(livro);
+               linha = br.readLine();
+           }
 
-
+       }catch (IOException e){
+           System.out.println("Erro");
+       }
         while(opcao!=0){
             System.out.println("Sistema de livraria: ");
             System.out.println(" 1 – Cadastrar novo livro");
@@ -52,24 +72,21 @@ public class SistemaLivraria {
 
             }
             if(opcao==2){
+              if(livrariaService.livros.isEmpty()){
+                  System.out.println("Nenhum livro cadastrado no sistema");
+              }
                 livrariaService.listarLivros();
+
             }
             if (opcao == 3) {
                 System.out.print("Digite o nome do livro a ser buscado: ");
                 String nomeBusca = scanner.nextLine();
                 List<Livros> livrosPorNome = livrariaService.buscarLivrosPorTitulo(nomeBusca);
+                if(livrosPorNome.isEmpty()){
+                    System.out.println("Livro não encontrado!");
+                }
                 for (Livros livro : livrosPorNome) {
-                    System.out.println("Resultado da busca por titulo: ");
-                    System.out.println();
-                    System.out.println("Codigo: " + livro.getCodigo());
-                    System.out.println("Titulo: " + livro.getTitulo());
-                    System.out.println("Editora: " + livro.getEditora());
-                    System.out.println("Categoria: " + livro.getArea());
-                    System.out.println("Ano: " + livro.getAno());
-                    System.out.println("Valor: R$ " + livro.getValor());
-                    System.out.println("Estoque: " + livro.getQtdEstoque());
-                    System.out.println("Valor total em estoque: R$ " + livro.getValor());
-                    System.out.println();
+                   livro.info();
                 }
 
             }
@@ -79,17 +96,8 @@ public class SistemaLivraria {
                 String categoriaBusca = scanner.nextLine();
                 List<Livros> livrosPorCategoria = livrariaService.buscarLivroPorCategoria(categoriaBusca);
                 for (Livros livro : livrosPorCategoria) {
-                    System.out.println("Resultado da busca por titulo: ");
-                    System.out.println();
-                    System.out.println("Codigo: " + livro.getCodigo());
-                    System.out.println("Titulo: " + livro.getTitulo());
-                    System.out.println("Editora: " + livro.getEditora());
-                    System.out.println("Categoria: " + livro.getArea());
-                    System.out.println("Ano: " + livro.getAno());
-                    System.out.println("Valor: R$ " + livro.getValor());
-                    System.out.println("Estoque: " + livro.getQtdEstoque());
-                    System.out.println("Valor total em estoque: R$ " + livro.getValor());
-                    System.out.println();
+                    livro.info();
+
                 }
 
             }
@@ -102,17 +110,8 @@ public class SistemaLivraria {
 
                 List<Livros> livroPorPreco = livrariaService.buscaPorPreco(valorMinimo, valorMaximo);
                 for (Livros livro : livroPorPreco) {
-                    System.out.println("Resultado da busca por titulo: ");
-                    System.out.println();
-                    System.out.println("Codigo: " + livro.getCodigo());
-                    System.out.println("Titulo: " + livro.getTitulo());
-                    System.out.println("Editora: " + livro.getEditora());
-                    System.out.println("Categoria: " + livro.getArea());
-                    System.out.println("Ano: " + livro.getAno());
-                    System.out.println("Valor: R$ " + livro.getValor());
-                    System.out.println("Estoque: " + livro.getQtdEstoque());
-                    System.out.println("Valor total em estoque: R$ " + livro.getValor());
-                    System.out.println();
+                    livro.info();
+
                 }
 
             }
@@ -121,17 +120,8 @@ public class SistemaLivraria {
                 int QtEstoque= scanner.nextInt();
                 List<Livros> estoque= new ArrayList<>();
                 for(Livros livro: estoque){
-                    System.out.println("Resultado da busca por titulo: ");
-                    System.out.println();
-                    System.out.println("Codigo: " + livro.getCodigo());
-                    System.out.println("Titulo: " + livro.getTitulo());
-                    System.out.println("Editora: " + livro.getEditora());
-                    System.out.println("Categoria: " + livro.getArea());
-                    System.out.println("Ano: " + livro.getAno());
-                    System.out.println("Valor: R$ " + livro.getValor());
-                    System.out.println("Estoque: " + livro.getQtdEstoque());
-                    System.out.println("Valor total em estoque: R$ " + livro.getValor());
-                    System.out.println();
+                    livro.info();
+
                 }
 
             }

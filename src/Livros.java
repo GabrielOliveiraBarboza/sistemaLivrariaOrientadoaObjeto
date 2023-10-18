@@ -57,4 +57,19 @@ public class Livros {
     public double getValorTotal() {
         return valor*qtdEstoque;
     }
+
+    public void info(){
+        Livros livros = new Livros(codigo, titulo, editora, area, ano, valor, qtdEstoque);
+        System.out.println("Resultado da busca por titulo: ");
+        System.out.println();
+        System.out.println("Codigo: " + livros.getCodigo());
+        System.out.println("Titulo: " + livros.getTitulo());
+        System.out.println("Editora: " + livros.getEditora());
+        System.out.println("Categoria: " + livros.getArea());
+        System.out.println("Ano: " + livros.getAno());
+        System.out.println("Valor: R$ " + livros.getValor());
+        System.out.println("Estoque: " + livros.getQtdEstoque());
+        System.out.println("Valor total em estoque: R$ " + getValorTotal());
+        System.out.println();
+    }
 }

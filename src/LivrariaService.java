@@ -9,12 +9,15 @@ public class LivrariaService {
 
     //Aqui criei uma lista de livros , onde utilizarei todos os atributos da classe Livros.
 
+
+
     List<Livros> livros;
 
     public LivrariaService() {
 
         this.livros = new ArrayList<>();
     }
+
 
     public void cadastrarLivro(Livros livro) {
         // passei como parametro a classe Livro
