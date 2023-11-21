@@ -8,9 +8,13 @@ public class Livros {
     int ano;
     double valor;
     int qtdEstoque;
+    Filial filial;
 
-// Abaixo criei um metodo construtor , o contrututor server para criar o objeto em memória. Devemos criar pois
-// utilizaremos quando formos instansiar a classe.
+    public void setFilial(Filial filial) {
+
+        this.filial = filial;
+    }
+
     public Livros(String codigo, String titulo, String editora, String area, int ano, double valor, int qtdEstoque) {
         this.codigo = codigo;
         this.titulo = titulo;
@@ -21,7 +25,6 @@ public class Livros {
         this.qtdEstoque = qtdEstoque;
     }
 
-  // Criei o método GET para acessar os atributos e retornar.
 
     public String getCodigo() {
         return codigo;
@@ -44,10 +47,12 @@ public class Livros {
     }
 
     public double getValor() {
+
         return valor;
     }
 
     public int getQtdEstoque() {
+
         return qtdEstoque;
     }
 
@@ -55,21 +60,24 @@ public class Livros {
     //metodo feito para clacular o valor de estoque
 
     public double getValorTotal() {
+
         return valor*qtdEstoque;
     }
+    public Filial getFilial() {
 
-    public void info(){
-        Livros livros = new Livros(codigo, titulo, editora, area, ano, valor, qtdEstoque);
-        System.out.println("Resultado da busca por titulo: ");
-        System.out.println();
-        System.out.println("Codigo: " + livros.getCodigo());
-        System.out.println("Titulo: " + livros.getTitulo());
-        System.out.println("Editora: " + livros.getEditora());
-        System.out.println("Categoria: " + livros.getArea());
-        System.out.println("Ano: " + livros.getAno());
-        System.out.println("Valor: R$ " + livros.getValor());
-        System.out.println("Estoque: " + livros.getQtdEstoque());
-        System.out.println("Valor total em estoque: R$ " + getValorTotal());
+        return filial;
+    }
+
+    public void info() {
+        System.out.println(">>>>> Cod#" + this.getCodigo());
+        System.out.println("Titulo: " + this.getTitulo());
+        System.out.println("Editora: " + this.getEditora());
+        System.out.println("Categoria: " + this.getArea());
+        System.out.println("Ano: " + this.getAno());
+        System.out.println("Valor: R$ " + this.getValor());
+        System.out.println("Estoque: " + this.getQtdEstoque());
+        System.out.println("Valor total em estoque: R$ " + this.getValorTotal());
         System.out.println();
     }
+
 }

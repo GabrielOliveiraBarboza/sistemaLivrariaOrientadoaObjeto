@@ -1,39 +1,15 @@
-
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class SistemaLivraria {
 
-    // aqui é a classe que ficará responsável por rodar o programa
-
     public static void main(String[] args)  {
-        String arquivo =("src/BDLivraria.csv");
-        Scanner scanner= new Scanner(System.in);
+        Scanner tec = new Scanner(System.in);
         int opcao= -1;
 
         LivrariaService livrariaService= new LivrariaService();
-       try (BufferedReader br = new BufferedReader(new FileReader(arquivo))){
-           String linha= br.readLine();
-          // linha=br.readLine();
-           while(linha!=null){
-               String [] vet = linha.split(",");
-               String codigo = vet[0];
-               String titulo =vet[1];
-               String editora = vet[2];
-               String area= vet[3];
-               int ano = Integer.parseInt(vet[4].trim());
-               double valor= Double.parseDouble(vet[5].trim());
-               int qtdEstoque= Integer.parseInt(vet[6].trim());
-               Livros livro = new Livros (codigo,titulo,editora,area,ano,valor,qtdEstoque);
-               livrariaService.cadastrarLivro(livro);
-               linha = br.readLine();
-           }
 
-       }catch (IOException e){
-           System.out.println("Erro");
-       }
+
         while(opcao!=0){
             System.out.println("Sistema de livraria: ");
             System.out.println(" 1 – Cadastrar novo livro");
@@ -43,58 +19,75 @@ public class SistemaLivraria {
             System.out.println("5 – Buscar livros por preço");
             System.out.println("6 – Busca por quantidade em estoque");
             System.out.println("7 – Valor total no estoque");
+            System.out.println("8-  Carregar estoque");
+            System.out.println("9-  Atualizar arquivo de estoque");
+            System.out.println("10- Criar filial");
+            System.out.println("11- Estoque por filial");
+            System.out.println("12- Buscar livro por código");
             System.out.println("0 – Encerrar atividades");
 
             System.out.println("Digite a opção desejada: ");
-            opcao= scanner.nextInt();
-            scanner.nextLine();
+            opcao= tec.nextInt();
+            tec.nextLine();
 
             if(opcao==1){
                 System.out.print("Digite o código do livro: ");
-                String codigo = scanner.nextLine();
+                String codigo = tec.nextLine();
                 System.out.print("Digite o título do livro: ");
-                String titulo = scanner.nextLine();
+                String titulo = tec.nextLine();
                 System.out.print("Digite a editora do livro: ");
-                String editora = scanner.nextLine();
+                String editora = tec.nextLine();
                 System.out.print("Digite a área do livro: ");
-                String area = scanner.nextLine();
+                String area = tec.nextLine();
                 System.out.print("Digite o ano do livro: ");
-                int ano = scanner.nextInt();
+                int ano = tec.nextInt();
                 System.out.print("Digite o valor do livro: ");
-                double valor = scanner.nextDouble();
+                double valor = tec.nextDouble();
                 System.out.print("Digite a quantidade em estoque: ");
-                int quantidadeEstoque = scanner.nextInt();
-                //Aqui eu criei uma nova instancia da classe livros para gravar todos os dados digitados do usuário
-                // como argumento para o construtor da classe livros
-                Livros novoLivro = new Livros(codigo, titulo, editora, area, ano, valor, quantidadeEstoque);
-
-                livrariaService.cadastrarLivro(novoLivro);
-
+                int quantidadeEstoque = tec.nextInt();
+                System.out.print("Digite o número da filial à qual o livro pertence: ");
+                int codigoFilial = tec.nextInt();
+                tec.nextLine();
+                if (livrariaService.verificarExistenciaFilial(codigoFilial)) {
+                    Filial filial = livrariaService.obterFilialPorCodigo(codigoFilial);
+                    Livros novoLivro = new Livros(codigo, titulo, editora, area, ano, valor, quantidadeEstoque);
+                    livrariaService.cadastrarLivro(novoLivro,filial);
+                } else {
+                    System.out.println("Filial não encontrada.");
+                }
             }
             if(opcao==2){
-              if(livrariaService.livros.isEmpty()){
-                  System.out.println("Nenhum livro cadastrado no sistema");
-              }
+                if(livrariaService.livros.isEmpty()){
+                    System.out.println("Nenhum livro cadastrado no sistema");
+                }
                 livrariaService.listarLivros();
-
             }
             if (opcao == 3) {
                 System.out.print("Digite o nome do livro a ser buscado: ");
-                String nomeBusca = scanner.nextLine();
-                List<Livros> livrosPorNome = livrariaService.buscarLivrosPorTitulo(nomeBusca);
-                if(livrosPorNome.isEmpty()){
-                    System.out.println("Livro não encontrado!");
+                String nomeBusca = tec.nextLine();
+                System.out.print("Digite o número da filial onde deseja fazer a busca: ");
+                int codigoFilialBusca = tec.nextInt();
+                tec.nextLine();
+                List<Livros> livrosPorNome = livrariaService.buscarLivrosPorTitulo(nomeBusca, codigoFilialBusca);
+                if (livrosPorNome.isEmpty()) {
+                    System.out.println("Livro não encontrado em estoque nesta filial!");
                 }
+                System.out.println();
                 for (Livros livro : livrosPorNome) {
-                   livro.info();
+                    livro.info();
                 }
-
             }
 
             if(opcao==4){
                 System.out.print("Digite a categoria dos livros a serem buscados: ");
-                String categoriaBusca = scanner.nextLine();
-                List<Livros> livrosPorCategoria = livrariaService.buscarLivroPorCategoria(categoriaBusca);
+                String categoriaBusca = tec.nextLine();
+                System.out.print("Digite o número da filial onde deseja fazer a busca: ");
+                int codigoFilialBusca = tec.nextInt();
+                tec.nextLine();
+                List<Livros> livrosPorCategoria = livrariaService.buscarLivroPorCategoria(categoriaBusca, codigoFilialBusca);
+                if(livrosPorCategoria.isEmpty()){
+                    System.out.println("Livro não encontrado!");
+                }
                 for (Livros livro : livrosPorCategoria) {
                     livro.info();
 
@@ -104,37 +97,84 @@ public class SistemaLivraria {
             if(opcao==5){
                 System.out.println("Filtro por valor, digite o valor do livro que procura: ");
                 System.out.println("Digite o valor minimo :");
-                double valorMinimo= scanner.nextDouble();
+                double valorMinimo= tec.nextDouble();
                 System.out.println("Digite o valor maximo :");
-                double valorMaximo= scanner.nextDouble();
-
-                List<Livros> livroPorPreco = livrariaService.buscaPorPreco(valorMinimo, valorMaximo);
+                double valorMaximo= tec.nextDouble();
+                System.out.print("Digite o número da filial onde deseja fazer a busca: ");
+                int codigoFilialBusca = tec.nextInt();
+                tec.nextLine();
+                List<Livros> livroPorPreco = livrariaService.buscaPorPreco(valorMinimo, valorMaximo,codigoFilialBusca);
                 for (Livros livro : livroPorPreco) {
                     livro.info();
 
                 }
 
             }
-            if(opcao==6){
+            if (opcao == 6) {
                 System.out.println("Digite a quantidade em estoque que busca:");
-                int QtEstoque= scanner.nextInt();
-                List<Livros> estoque= new ArrayList<>();
-                for(Livros livro: estoque){
-                    livro.info();
-
+                int QtEstoque = tec.nextInt();
+                System.out.print("Digite o número da filial onde deseja fazer a busca: ");
+                int codigoFilial= tec.nextInt();
+                List<Livros> livrosNoEstoque = livrariaService.buscaProQtEstoque(QtEstoque,codigoFilial);
+                if (livrosNoEstoque.isEmpty()) {
+                    System.out.println("Nenhum livro encontrado com a quantidade em estoque desejada.");
+                } else {
+                    for (Livros livro : livrosNoEstoque) {
+                        livro.info();
+                    }
                 }
-
             }
+
             if(opcao==7){
 
-                System.out.println("O valor total do estoque é ?" + livrariaService.calcularEstoque() );
+                System.out.println("O valor total do estoque é ? R$" + livrariaService.calcularEstoque() );
+            }
+            if(opcao==8) {
+                livrariaService.carregarFilial();
+                livrariaService.carregarEstoque();
+                System.out.println("Filial e estoque carregados! ");
+            }
+            if(opcao==9){
+                livrariaService.salvarEstoque();
+                livrariaService.salvarFilial();
+            }
+            if(opcao==10){
+                System.out.println("-----Cadastrando filial----");
+                System.out.println("Digite o codigo");
+                int codigo = tec.nextInt();
+                tec.nextLine();
+                System.out.println("Digite o nome");
+                String nome= tec.nextLine();
+                System.out.println("Digite o endereco");
+                String endereco= tec.nextLine();
+                System.out.println("Digite o contato");
+                String contato = tec.nextLine();
+                Filial novaFilial = new Filial(codigo,nome,endereco,contato);
+                livrariaService.criarFilial(novaFilial);
+            }
+            if (opcao == 11) {
+                System.out.print("Digite o número da filial onde deseja fazer a busca: ");
+                int codigoFilial = tec.nextInt();
+                tec.nextLine();
+
+                if (livrariaService.verificarExistenciaFilial(codigoFilial)) {
+                    livrariaService.listarEstoqueFilial(codigoFilial);
+                } else {
+                    System.out.println("Filial não encontrada.");
+                }
+            }
+            if(opcao==12){
+                System.out.println("Digite o código do livro que deseja buscar: ");
+                String busca = tec.next();
+                List<Livros> buscaCodigo = livrariaService.buscaPorCodigo(busca);
+                for (Livros livro : buscaCodigo) {
+                    livro.info();
+                }
             }
             if(opcao==0){
                 System.out.println("Você encerrou o programa! ");
             }
         }
-
     }
-
 }
 
