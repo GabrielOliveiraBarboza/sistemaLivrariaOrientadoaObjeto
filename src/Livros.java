@@ -15,12 +15,12 @@ public class Livros {
         this.filial = filial;
     }
 
-    public Livros(String codigo, String titulo, String editora, String area, int ano, double valor, int qtdEstoque) {
+    public Livros(String codigo, String titulo,int ano, String area, String editora,  double valor, int qtdEstoque) {
         this.codigo = codigo;
         this.titulo = titulo;
-        this.editora = editora;
-        this.area = area;
         this.ano = ano;
+        this.area = area;
+        this.editora = editora;
         this.valor = valor;
         this.qtdEstoque = qtdEstoque;
     }
@@ -55,10 +55,6 @@ public class Livros {
 
         return qtdEstoque;
     }
-
-
-    //metodo feito para clacular o valor de estoque
-
     public double getValorTotal() {
 
         return valor*qtdEstoque;
@@ -69,7 +65,7 @@ public class Livros {
     }
 
     public void info() {
-        System.out.println(">>>>> Cod#" + this.getCodigo());
+        System.out.println(">>>>> Cod#: " + this.getCodigo());
         System.out.println("Titulo: " + this.getTitulo());
         System.out.println("Editora: " + this.getEditora());
         System.out.println("Categoria: " + this.getArea());
